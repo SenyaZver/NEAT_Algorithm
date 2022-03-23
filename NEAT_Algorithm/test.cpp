@@ -55,4 +55,10 @@ int main() {
 	example->setOutput(outGenes);
 
 	std::vector<double> result = example->getOutput();
+
+
+	std::cout << "result is ";
+	for (auto it : result) {
+		std::cout << it << " ";
+	}
 }

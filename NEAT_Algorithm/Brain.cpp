@@ -85,7 +85,10 @@ std::vector<double> Brain::getOutput() {
 		//steps four, five and six finished
 
 	}
-
+	
+	for (auto result : outputGenes) {
+		output.push_back(result->get_value());
+	}
 
 	return output;
 }
