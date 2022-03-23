@@ -24,23 +24,40 @@ std::set<Connection_gene*> Node_gene::getinputs() {
 	return this->inputs;
 }
 
+std::set<Node_gene*> Node_gene::getInputGenes()
+{
+	std::set<Node_gene*>* inputGenes = new std::set<Node_gene*>();
+	for (auto connection : inputs) {
+		inputGenes->insert(connection->getInGene());
+	}
+
+	return *inputGenes;
+}
+
+std::set<Node_gene*> Node_gene::getOutputGenes()
+{
+	std::set<Node_gene*>* outputGenes = new std::set<Node_gene*>();
+	for (auto connection : outputs) {
+		outputGenes->insert(connection->getOutGene());
+	}
+
+	return *outputGenes;
+}
+
 void Node_gene::setInputs(std::set<Connection_gene*> inputs) {
 	this->inputs = inputs;
 }
 
 void Node_gene::setInput(Node_gene* newInput, double connectionValue, int innovationNumber) {
-	Connection_gene newConnection(newInput, this, connectionValue, innovationNumber);
-	newInput->outputs.insert(&newConnection);
-	this->inputs.insert(&newConnection);
-
-	//debug stuff bruh
-	std::cout << innovationNumber << " " << inputs.size() << std::endl;
+	Connection_gene* newConnection = new Connection_gene(newInput, this, connectionValue, innovationNumber);
+	newInput->outputs.insert(newConnection);
+	this->inputs.insert(newConnection);
 }
 
 void Node_gene::setOutput(Node_gene* newOutput, double connectionValue, int innovationNumber) {
-	Connection_gene newConnection(newOutput, this, connectionValue, innovationNumber);
-	newOutput->inputs.insert(&newConnection);
-	this->outputs.insert(&newConnection);
+	Connection_gene* newConnection = new Connection_gene(newOutput, this, connectionValue, innovationNumber);
+	newOutput->inputs.insert(newConnection);
+	this->outputs.insert(newConnection);
 }
 
 
@@ -71,4 +88,13 @@ void Node_gene::printOutputs() {
 
 }
 
+void Node_gene::calculate() {
+	double sum = 0;
+	for (Connection_gene* connection : inputs) {
+		sum += connection->getWeight() * connection->getInputValue();
+	}
+	sum = sum / (1 + abs(sum));	//fastSigmoid
+	this->value = sum;
+//	std::cout << "calculated gene " << this->name << " value is " << this->value << std::endl;
+}
 

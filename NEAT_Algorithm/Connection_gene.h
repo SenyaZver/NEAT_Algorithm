@@ -23,8 +23,11 @@ public:
 	void setWeight(double weight);
 	void enable();
 	void disable();
-	
+	double getInputValue();
+
+
 	Node_gene* getOutGene();
+	Node_gene* getInGene();
 	double getWeight();
 	bool isEnabled();
 

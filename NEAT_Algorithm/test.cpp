@@ -7,14 +7,6 @@
 #include <iostream>
 
 int main() {
-	//note: connection genes leak memory
-
-
-	//consider: constructor for Node_gene takes copies of the values instad of references
-	//which makes impossible writing something like:
-	//inputGenes.push_back(new Node_gene(0.8, new std::set<Connection_gene>, new std::set<Connection_gene>));
-	//is this bad? //edit, fixed
-
 
 	//creating inputs
 	std::vector<Node_gene*> inputGenes;
@@ -48,17 +40,19 @@ int main() {
 	outGenes.push_back(four);
 
 
+	zero->name = "zero";
+	one->name = "one";
+	two->name = "two";
+	three->name = "three";
+	four->name = "four";
 
-	three->printOutputs();
-	std::cout << std::endl;
-
-	for (auto it : inputGenes) {
-		it->printOutputs();
-		std::cout << std::endl;
-	}
-
-
-//	Brain example()
+//	two->calculate(); //works
 
 
+	Brain* example = new Brain();
+	
+	example->setInput(inputGenes);
+	example->setOutput(outGenes);
+
+	std::vector<double> result = example->getOutput();
 }

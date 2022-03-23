@@ -18,11 +18,10 @@ Connection_gene::Connection_gene(const Connection_gene& obj) {
 
 }
 
-//memory leak when using Node_gene.setInput method (new connection gets destroyed)
 Connection_gene::~Connection_gene()
 {
-//	delete this->in;
-//	delete this->out;
+	delete this->in;
+	delete this->out;
 }
 
 void Connection_gene::setWeight(double weight)
@@ -40,6 +39,11 @@ void Connection_gene::disable()
 	this->Enabled = false;
 }
 
+double Connection_gene::getInputValue()
+{
+	return this->in->get_value();
+}
+
 double Connection_gene::getWeight()
 {
 	return this->weight;
@@ -52,4 +56,9 @@ bool Connection_gene::isEnabled()
 
 Node_gene* Connection_gene::getOutGene() {
 	return this->out;
+}
+
+Node_gene* Connection_gene::getInGene()
+{
+	return this->in;
 }

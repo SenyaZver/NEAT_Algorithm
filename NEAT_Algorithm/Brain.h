@@ -26,6 +26,7 @@ private:
 
 public:
 	Brain(std::vector<Node_gene*> inputGenes, std::vector<Node_gene*> outputGenes, std::vector<Node_gene*> hiddenGenes);
+	Brain();
 
 	void mutate();
 	void setFitnessScore();
@@ -37,6 +38,8 @@ public:
 	std::vector<double> getOutput();
 	
 	void setInput(std::vector<Node_gene*> input);
+
+	void setOutput(std::vector<Node_gene*> output);
 	
 
 
