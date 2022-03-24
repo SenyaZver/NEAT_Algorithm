@@ -16,11 +16,11 @@ Node_gene::Node_gene(double value, std::set<Connection_gene*> inputs, std::set<C
 	this->outputs = outputs;
 }
 
-std::set<Connection_gene*> Node_gene::getoutputs() {
+std::set<Connection_gene*> Node_gene::getOutConnections() {
 	return this->outputs;
 }
 
-std::set<Connection_gene*> Node_gene::getinputs() {
+std::set<Connection_gene*> Node_gene::getInConnections() {
 	return this->inputs;
 }
 
@@ -62,7 +62,7 @@ void Node_gene::setOutput(Node_gene* newOutput, double connectionValue, int inno
 
 
 
-void Node_gene::set_value(double value) {
+void Node_gene::setValue(double value) {
 	this->value = value;
 }
 
@@ -70,7 +70,7 @@ double Node_gene::fastSigmoid(double value){
 	return value/(1+abs(value));
 }
 
-double Node_gene::get_value() {
+double Node_gene::getValue() {
 	return this->value;
 }
 
@@ -86,6 +86,15 @@ void Node_gene::printOutputs() {
 		connection->getOutGene()->print();
 	}
 
+}
+
+void Node_gene::printInputs()
+{
+	std::cout << "Node " << this->value << " .inputs are: ";
+
+	for (Connection_gene* connection : inputs) {
+		connection->getInGene()->print();
+	}
 }
 
 void Node_gene::calculate() {

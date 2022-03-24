@@ -18,7 +18,7 @@ public:
 	Node_gene(double value);
 	Node_gene(double value, std::set<Connection_gene*> inputs, std::set<Connection_gene*> outputs);
 
-	Node_gene(const Node_gene& obj) {
+	Node_gene(const Node_gene& obj) {	//TODO get this into cpp
 		this->value = obj.value;
 		for (auto it : obj.inputs) {
 			this->inputs.insert(it);
@@ -29,25 +29,29 @@ public:
 	}
 
 
-	void set_value(double value);
+	void setValue(double value);
+	double getValue();
 
-	std::set<Connection_gene*> getoutputs();
-	std::set<Connection_gene*> getinputs();
+
+	std::set<Connection_gene*> getOutConnections();
+	std::set<Connection_gene*> getInConnections();
 
 	std::set<Node_gene*> getInputGenes();
 	std::set<Node_gene*> getOutputGenes();
 
 	double fastSigmoid(double value);
 
-	double get_value();
 
 	void setOutput(Node_gene* newOutput, double connectionValue, int innovationNumber);
 	void setInput(Node_gene* newInput, double connectionValue, int innovationNumber);
+
 	void setInputs(std::set<Connection_gene*> inputs);
 
 	void calculate();
 
 
+	//debug functions
 	void printOutputs();
+	void printInputs();
 	void print();
 };

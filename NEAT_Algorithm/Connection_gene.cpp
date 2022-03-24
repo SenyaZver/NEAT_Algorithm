@@ -41,7 +41,7 @@ void Connection_gene::disable()
 
 double Connection_gene::getInputValue()
 {
-	return this->in->get_value();
+	return this->in->getValue();
 }
 
 double Connection_gene::getWeight()
