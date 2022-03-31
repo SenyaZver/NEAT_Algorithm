@@ -14,7 +14,6 @@ private:
 
 
 public:
-	std::string name;
 	Node_gene(double value);
 	Node_gene(double value, std::set<Connection_gene*> inputs, std::set<Connection_gene*> outputs);
 

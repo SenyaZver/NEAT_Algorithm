@@ -61,15 +61,15 @@ int main() {
 //	for (auto it : result) {
 //		std::cout << it << " ";
 //	}
-
+	
 	Brain* example = new Brain();
 	example->createDefault(10, 6, 2);
 
 
 	//input example
-	std::vector<int> input(10);
+	std::vector<int>* input = new std::vector<int>(10);
 	for (int i = 0; i < 10; i++) {
-		input[i] = i;
+		(*input)[i] = i;
 	}
 
 	std::vector<double> result = example->feedForward(input);
@@ -79,5 +79,11 @@ int main() {
 	for (auto it : result) {
 		std::cout << it << " ";
 	}
+	std::cout << std::endl;
 
+	example->ConnectionPrint();
+	std::cout << std::endl;
+	
+	example->mutate();
+	example->ConnectionPrint();
 }

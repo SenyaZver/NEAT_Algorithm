@@ -12,20 +12,19 @@ class Brain
 private:
 
 //	std::vector<Connection_gene*> connectionGenes;
-
+	std::vector<Node_gene*>* inputGenes;
+	std::vector<Node_gene*>* outputGenes;
+	std::vector<Node_gene*>* hiddenGenes;
 	int fitnessScore;
 
 	//there are used in mutation
 	void addHiddenGene(Node_gene* newNode_Gene);
 	void addConnection(Connection_gene* newConnection_Gene);
-	void changeWeightsRandomly(std::vector<Connection_gene*> connectionGenes);
+	void changeWeightsRandomly();
 	void disableGenesRandomly(std::vector<Connection_gene*> connectionGenes);
 
 public:
-	std::vector<Node_gene*> inputGenes;
-	std::vector<Node_gene*> outputGenes;
-	std::vector<Node_gene*> hiddenGenes;
-	Brain(std::vector<Node_gene*> inputGenes, std::vector<Node_gene*> outputGenes, std::vector<Node_gene*> hiddenGenes);
+	Brain(std::vector<Node_gene*>* inputGenes, std::vector<Node_gene*>* outputGenes, std::vector<Node_gene*>* hiddenGenes);
 	Brain();
 
 	void mutate();
@@ -42,14 +41,15 @@ public:
 	std::vector<double> getOutput();
 
 	//getting input and calculating the result
-	std::vector<double> feedForward(std::vector<int> image);
+	std::vector<double> feedForward(std::vector<int>* image);
 	
 
 
 	//debug functions
-	void setInput(std::vector<Node_gene*> input);
-	void setOutput(std::vector<Node_gene*> output);
+	void setInput(std::vector<Node_gene*>* input);
+	void setOutput(std::vector<Node_gene*>* output);
 	
+	void ConnectionPrint();
 
 
 };

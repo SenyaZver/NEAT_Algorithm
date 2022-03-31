@@ -10,15 +10,32 @@ void Brain::addHiddenGene(Node_gene* newNode_Gene) {
 void Brain::addConnection(Connection_gene* newConnection_Gene) {
 	//TODO
 }
-void Brain::changeWeightsRandomly(std::vector<Connection_gene*> connectionGenes) {
-	//TODO
+void Brain::changeWeightsRandomly() {
+	for (auto input : *inputGenes) {
+		for (auto connection : input->getOutConnections()) {
+			if (rand() % 100 < 40) {
+				double value = connection->getWeight();
+				value = value + rand() / (RAND_MAX + 1.);
+				connection->setWeight(value);
+			}
+		}
+	}
+	for (auto gene : *hiddenGenes) {
+		for (auto connection : gene->getOutConnections()) {
+			if (rand() % 100 < 40) {
+				double value = connection->getWeight();
+				value = value + rand() / (RAND_MAX + 1.);
+				connection->setWeight(value);
+			}
+		}
+	}
 }
 void Brain::disableGenesRandomly(std::vector<Connection_gene*> connectionGenes) {
 	//TODO
 }
 
 
-Brain::Brain(std::vector<Node_gene*> inputGenes, std::vector<Node_gene*> outputGenes, std::vector<Node_gene*> hiddenGenes) {
+Brain::Brain(std::vector<Node_gene*>* inputGenes, std::vector<Node_gene*>* outputGenes, std::vector<Node_gene*>* hiddenGenes) {
 	this->inputGenes = inputGenes;
 	this->outputGenes = outputGenes;
 	this->hiddenGenes = hiddenGenes;
@@ -27,11 +44,15 @@ Brain::Brain(std::vector<Node_gene*> inputGenes, std::vector<Node_gene*> outputG
 
 Brain::Brain()
 {
+
+	this->inputGenes = new std::vector<Node_gene*>;
+	this->outputGenes = new std::vector<Node_gene*>;
+	this->hiddenGenes = new std::vector<Node_gene*>;
 	fitnessScore = 0;
 }
 
 void Brain::mutate() {
-	//TODO
+	this->changeWeightsRandomly();
 }
 void Brain::setFitnessScore() {
 	//TODO
@@ -51,7 +72,7 @@ std::vector<double> Brain::getOutput() {
 
 	std::vector<double> output;
 
-	std::set<Node_gene*> calculatedSet(this->inputGenes.begin(), this->inputGenes.end()); //vector->set;
+	std::set<Node_gene*> calculatedSet(this->inputGenes->begin(), this->inputGenes->end()); //vector->set;
 	std::set<Node_gene*> availableSet;
 
 	while (true) {
@@ -68,17 +89,13 @@ std::vector<double> Brain::getOutput() {
 
 			}
 		}
-
 		//step two finished
-
 
 		if (availableSet.empty()) { //stop condition
 			break;
 		}
 
-
 		std::set<Node_gene*> setToCalculate;
-
 		for (Node_gene* availableNode : availableSet) {
 			std::set<Node_gene*> inputs = availableNode->getInputGenes();
 
@@ -89,8 +106,6 @@ std::vector<double> Brain::getOutput() {
 		}
 		//step three finished
 
-
-
 		for (Node_gene* gene : setToCalculate) {
 			gene->calculate();
 			availableSet.erase(gene);
@@ -100,7 +115,7 @@ std::vector<double> Brain::getOutput() {
 
 	}
 	
-	for (auto result : outputGenes) {
+	for (auto result : *outputGenes) {
 		output.push_back(result->getValue());
 	}
 
@@ -109,12 +124,13 @@ std::vector<double> Brain::getOutput() {
 
 void Brain::createDefault(int inputSize, int hiddenGenesAmount, int outputSize)
 {
+
 	for (int i = 0; i < inputSize; i++) {
-		inputGenes.push_back(new Node_gene(0));
+		inputGenes->push_back(new Node_gene(0));
 	}
 
 	for (int i = 0; i < outputSize; i++) {
-		outputGenes.push_back(new Node_gene(0));
+		outputGenes->push_back(new Node_gene(0));
 	}
 
 
@@ -124,37 +140,44 @@ void Brain::createDefault(int inputSize, int hiddenGenesAmount, int outputSize)
 		double weight = rand() / (RAND_MAX + 1.);
 
 		int innovationNumber = 0;
-		for (auto input : inputGenes) {
+		for (auto input : *inputGenes) {
 			weight = rand() / (RAND_MAX + 1.);
 			hiddenNode->setInput(input, weight, innovationNumber);
 		}
 
 		weight = rand() / (RAND_MAX + 1.);
 
-		for (auto output : outputGenes) {
+		for (auto output : *outputGenes) {
 			weight = rand() / (RAND_MAX + 1.);
 			output->setInput(hiddenNode, weight, innovationNumber);
 		}
-		hiddenGenes.push_back(hiddenNode);
+		hiddenGenes->push_back(hiddenNode);
 	}
 }
 
 
 
-void Brain::setInput(std::vector<Node_gene*> input) {
+void Brain::setInput(std::vector<Node_gene*>* input) {
 	this->inputGenes = input;
 }
 
 
 
-std::vector<double> Brain::feedForward(std::vector<int> image)
+std::vector<double> Brain::feedForward(std::vector<int>* image)
 {
-	if (image.size() != this->inputGenes.size()) {
-		return std::vector<double>(outputGenes.size());
+	
+	if (image->size() != this->inputGenes->size()) {
+		return std::vector<double>(outputGenes->size());
 	}
 
-	for (int i = 0; i < image.size(); i++) {
-		this->inputGenes[i]->setValue(image[i]);
+	//for (int i = 0; i < image->size(); i++) {
+	//	inputGenes[i]->setValue((*image)[i]);
+	//}
+	int i = 0;
+	for (auto gene : *inputGenes) {
+		double value = (*image)[i];
+		gene->setValue(value);
+		i++;
 	}
 
 	return this->getOutput();
@@ -162,11 +185,17 @@ std::vector<double> Brain::feedForward(std::vector<int> image)
 
 
 
-void Brain::setOutput(std::vector<Node_gene*> output) {
+void Brain::setOutput(std::vector<Node_gene*>* output) {
 	this->outputGenes = output;
 }
 
-
+void Brain::ConnectionPrint() {
+	for (auto gene : *hiddenGenes) {
+		for (auto connection : gene->getOutConnections()) {
+			std::cout << connection->getWeight() << std::endl;
+		}
+	}
+}
 
 
 
