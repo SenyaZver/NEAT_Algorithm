@@ -20,8 +20,8 @@ Connection_gene::Connection_gene(const Connection_gene& obj) {
 
 Connection_gene::~Connection_gene()
 {
-	delete this->in;
-	delete this->out;
+	//delete this->in;
+	//delete this->out;
 }
 
 void Connection_gene::setWeight(double weight)
@@ -39,26 +39,26 @@ void Connection_gene::disable()
 	this->Enabled = false;
 }
 
-double Connection_gene::getInputValue()
+double Connection_gene::getInputValue() const
 {
 	return this->in->getValue();
 }
 
-double Connection_gene::getWeight()
+double Connection_gene::getWeight() const
 {
 	return this->weight;
 }
 
-bool Connection_gene::isEnabled()
+bool Connection_gene::isEnabled() const
 {
 	return this->Enabled;
 }
 
-Node_gene* Connection_gene::getOutGene() {
+Node_gene* Connection_gene::getOutGene() const {
 	return this->out;
 }
 
-Node_gene* Connection_gene::getInGene()
+Node_gene* Connection_gene::getInGene() const
 {
 	return this->in;
 }

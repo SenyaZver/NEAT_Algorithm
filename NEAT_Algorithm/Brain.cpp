@@ -4,11 +4,67 @@
 
 
 	//there are used in mutation
-void Brain::addHiddenGene(Node_gene* newNode_Gene) {
-	//TODO
+void Brain::addHiddenGene() {
+	std::vector<Node_gene*> allGenes;
+
+
+	allGenes.insert(allGenes.end(), inputGenes->begin(), inputGenes->end());
+	allGenes.insert(allGenes.end(), hiddenGenes->begin(), hiddenGenes->end());
+
+	
+	int chosenGene = rand() % allGenes.size();		//choose random gene
+	Node_gene* inGene = allGenes[chosenGene];
+
+
+	std::set<Connection_gene*> set = inGene->getOutConnections();
+	std::vector<Connection_gene*> connections(set.size());
+	std::copy(set.begin(), set.end(), connections.begin());		//creating a vector of gene's connections
+
+	
+	int choosenConnection = rand() % connections.size();		//choose random outConnection of chosen gene		
+	
+
+	Connection_gene* connection = connections[choosenConnection];
+	Node_gene* outGene = connection->getOutGene();
+	double weight = connection->getWeight();
+
+
+	inGene->getOutConnections().erase(connection);	//delete previous connection
+	outGene->getInConnections().erase(connection);
+
+	Node_gene* newGene = new Node_gene(0);
+	newGene->setOutput(outGene, weight, 20);
+	newGene->setInput(inGene, 1, 20);
+	hiddenGenes->push_back(newGene);
 }
-void Brain::addConnection(Connection_gene* newConnection_Gene) {
-	//TODO
+void Brain::addConnection() {
+	std::vector<Node_gene*> allGenes;
+
+
+	allGenes.insert(allGenes.end(), inputGenes->begin(), inputGenes->end());
+	allGenes.insert(allGenes.end(), hiddenGenes->begin(), hiddenGenes->end());
+
+
+	int firstChosenGene = rand() % allGenes.size();		//choose first random gene
+	Node_gene* firstGene = allGenes[firstChosenGene];
+
+	int secondChosenGene = rand() % allGenes.size();	//choose second random gene
+	Node_gene* secondGene = allGenes[secondChosenGene];
+	
+	std::set<Node_gene*> outputs = firstGene->getOutputGenes();
+
+	
+	if (outputs.find(secondGene) != outputs.end()) {
+
+		double weight = rand() / (RAND_MAX + 1.);
+		firstGene->setOutput(secondGene, weight, 50);
+
+		weight = rand() / (RAND_MAX + 1.);
+		secondGene->setInput(firstGene, weight, 50);
+	}
+
+
+
 }
 void Brain::changeWeightsRandomly() {
 	for (auto input : *inputGenes) {
@@ -30,7 +86,7 @@ void Brain::changeWeightsRandomly() {
 		}
 	}
 }
-void Brain::disableGenesRandomly(std::vector<Connection_gene*> connectionGenes) {
+void Brain::disableGenesRandomly() {
 	//TODO
 }
 
@@ -52,6 +108,14 @@ Brain::Brain()
 }
 
 void Brain::mutate() {
+
+	if (rand() % 100 < 3) {				//3 percent chance to add a connection
+		this->addConnection();
+	}
+	if (rand() % 100 < 5) {				//5 percent chance to add a hidden gene
+		this->addHiddenGene();
+	}
+
 	this->changeWeightsRandomly();
 }
 void Brain::setFitnessScore() {
@@ -118,6 +182,8 @@ std::vector<double> Brain::getOutput() {
 	for (auto result : *outputGenes) {
 		output.push_back(result->getValue());
 	}
+
+
 
 	return output;
 }

@@ -10,21 +10,21 @@ Node_gene::Node_gene(double value) {
 	this->outputs;
 }
 
-Node_gene::Node_gene(double value, std::set<Connection_gene*> inputs, std::set<Connection_gene*> outputs) {
+Node_gene::Node_gene(double value, std::set<Connection_gene*>& inputs, std::set<Connection_gene*>& outputs) {
 	this->value = value;
 	this->inputs = inputs;
 	this->outputs = outputs;
 }
 
-std::set<Connection_gene*> Node_gene::getOutConnections() {
+std::set<Connection_gene*> Node_gene::getOutConnections() const {
 	return this->outputs;
 }
 
-std::set<Connection_gene*> Node_gene::getInConnections() {
+std::set<Connection_gene*> Node_gene::getInConnections() const {
 	return this->inputs;
 }
 
-std::set<Node_gene*> Node_gene::getInputGenes()
+std::set<Node_gene*> Node_gene::getInputGenes() const
 {
 	std::set<Node_gene*>* inputGenes = new std::set<Node_gene*>();
 	for (auto connection : inputs) {
@@ -34,7 +34,7 @@ std::set<Node_gene*> Node_gene::getInputGenes()
 	return *inputGenes;
 }
 
-std::set<Node_gene*> Node_gene::getOutputGenes()
+std::set<Node_gene*> Node_gene::getOutputGenes() const
 {
 	std::set<Node_gene*>* outputGenes = new std::set<Node_gene*>();
 	for (auto connection : outputs) {
@@ -44,7 +44,7 @@ std::set<Node_gene*> Node_gene::getOutputGenes()
 	return *outputGenes;
 }
 
-void Node_gene::setInputs(std::set<Connection_gene*> inputs) {
+void Node_gene::setInputs(std::set<Connection_gene*>& inputs) {
 	this->inputs = inputs;
 }
 
@@ -55,7 +55,7 @@ void Node_gene::setInput(Node_gene* newInput, double connectionValue, int innova
 }
 
 void Node_gene::setOutput(Node_gene* newOutput, double connectionValue, int innovationNumber) {
-	Connection_gene* newConnection = new Connection_gene(newOutput, this, connectionValue, innovationNumber);
+	Connection_gene* newConnection = new Connection_gene(this, newOutput, connectionValue, innovationNumber);
 	newOutput->inputs.insert(newConnection);
 	this->outputs.insert(newConnection);
 }
@@ -70,7 +70,7 @@ double Node_gene::fastSigmoid(double value){
 	return value/(1+abs(value));
 }
 
-double Node_gene::getValue() {
+double Node_gene::getValue() const {
 	return this->value;
 }
 

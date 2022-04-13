@@ -23,13 +23,13 @@ public:
 	void setWeight(double weight);
 	void enable();
 	void disable();
-	double getInputValue();
+	double getInputValue() const;
 
 
-	Node_gene* getOutGene();
-	Node_gene* getInGene();
-	double getWeight();
-	bool isEnabled();
+	Node_gene* getOutGene() const;
+	Node_gene* getInGene() const;
+	double getWeight() const;
+	bool isEnabled() const;
 
 };
 

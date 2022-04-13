@@ -18,10 +18,10 @@ private:
 	int fitnessScore;
 
 	//there are used in mutation
-	void addHiddenGene(Node_gene* newNode_Gene);
-	void addConnection(Connection_gene* newConnection_Gene);
+	void addHiddenGene();
+	void addConnection();
 	void changeWeightsRandomly();
-	void disableGenesRandomly(std::vector<Connection_gene*> connectionGenes);
+	void disableGenesRandomly();
 
 public:
 	Brain(std::vector<Node_gene*>* inputGenes, std::vector<Node_gene*>* outputGenes, std::vector<Node_gene*>* hiddenGenes);
