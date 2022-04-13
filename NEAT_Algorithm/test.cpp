@@ -30,8 +30,9 @@ int main() {
 	std::cout << std::endl;
 	
 
-
+	
 	Brain* copy = example->clone();
+
 
 	std::vector<double> newResult = copy->feedForward(&input);
 

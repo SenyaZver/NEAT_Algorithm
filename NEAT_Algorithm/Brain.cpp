@@ -104,6 +104,32 @@ Brain::Brain()
 	fitnessScore = 0;
 }
 
+Brain::~Brain()
+{
+	for (auto gene : *inputGenes) {
+		for (auto connection : gene->getOutConnections()) {
+			delete connection;
+		}
+	}
+	for (auto gene : *hiddenGenes) {
+		for (auto connection : gene->getOutConnections()) {
+			delete connection;
+		}
+	}
+
+	for (auto gene : *inputGenes) {
+		delete gene;
+	}
+	for (auto gene : *hiddenGenes) {
+		delete gene;
+	}
+	for (auto gene : *outputGenes) {
+		delete gene;
+	}
+
+
+}
+
 void Brain::mutate() {
 
 	if (rand() % 100 < 3) {				//3 percent chance to add a connection
