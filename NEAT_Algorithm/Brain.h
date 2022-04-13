@@ -42,7 +42,9 @@ public:
 
 	//getting input and calculating the result
 	std::vector<double> feedForward(std::vector<int>* image);
+
 	
+	Brain* clone();
 
 
 	//debug functions

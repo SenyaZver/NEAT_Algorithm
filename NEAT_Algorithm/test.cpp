@@ -29,9 +29,11 @@ int main() {
 	//example->ConnectionPrint();
 	std::cout << std::endl;
 	
-	example->mutate();
 
-	std::vector<double> newResult = example->feedForward(&input);
+
+	Brain* copy = example->clone();
+
+	std::vector<double> newResult = copy->feedForward(&input);
 
 	std::cout << "result is ";
 	for (auto it : newResult) {

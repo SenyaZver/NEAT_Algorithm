@@ -58,8 +58,8 @@ void Brain::addConnection() {
 		double weight = rand() / (RAND_MAX + 1.);	//choose random number close to 1(actually it would be better to be close to 0
 		firstGene->setOutput(secondGene, weight, 50);
 
-		weight = rand() / (RAND_MAX + 1.);		//same
-		secondGene->setInput(firstGene, weight, 50);
+		//weight = rand() / (RAND_MAX + 1.);		//same
+		//secondGene->setInput(firstGene, weight, 50);
 	}
 
 }
@@ -216,6 +216,9 @@ void Brain::createDefault(int inputSize, int hiddenGenesAmount, int outputSize)
 		}
 		hiddenGenes->push_back(hiddenNode);
 	}
+	//std::cout << outputGenes->size() << std::endl;
+	//vs
+	//std::cout << outputGenes[0].size() << std::endl;
 }
 
 
@@ -234,7 +237,7 @@ std::vector<double> Brain::feedForward(std::vector<int>* image)
 	}
 
 	//for (int i = 0; i < image->size(); i++) {
-	//	inputGenes[i]->setValue((*image)[i]);
+	//	inputGenes[i]->setValue(image[i]);
 	//}
 	int i = 0;
 	for (auto gene : *inputGenes) {
@@ -258,6 +261,89 @@ void Brain::ConnectionPrint() {
 			std::cout << connection->getWeight() << std::endl;
 		}
 	}
+}
+
+
+Brain* Brain::clone() {
+	std::vector<Node_gene*>* newInputGenes = new std::vector<Node_gene*>;
+	std::vector<Node_gene*>* newOutputGenes = new std::vector<Node_gene*>;
+	std::vector<Node_gene*>* newHiddenGenes = new std::vector<Node_gene*>;
+	Brain* copy = new Brain();
+	copy->inputGenes = newInputGenes;
+	copy->outputGenes = newOutputGenes;
+	copy->hiddenGenes = newHiddenGenes;
+
+
+	for (int i = 0; i < (this->inputGenes->size()); i++) {
+		Node_gene* inputNode = new Node_gene(0);
+		newInputGenes->push_back(inputNode);
+	}
+	for (int i = 0; i < (this->hiddenGenes->size()); i++) {
+		Node_gene* hiddenNode = new Node_gene(0);
+		newHiddenGenes->push_back(hiddenNode);
+	}
+	for (int i = 0; i < (this->outputGenes->size()); i++) {
+		Node_gene* outputNode = new Node_gene(0);
+		newOutputGenes->push_back(outputNode);
+	}
+
+
+	for (int i = 0; i < inputGenes[0].size(); i++) {
+		for (int j = 0; j < hiddenGenes[0].size(); j++) {	
+			//chech if hiddenGene[j] is connected to inputgene[i]
+			auto temp = inputGenes[0][i]->getOutputGenes();
+
+			if (temp.find(hiddenGenes[0][j]) != temp.end()) {
+				double weight = 0;
+				for (auto connection : inputGenes[0][i]->getOutConnections()) {
+					if (connection->getOutGene() == hiddenGenes[0][j]) {
+						weight = connection->getWeight();
+					}
+				}
+				newInputGenes[0][i]->setOutput(newHiddenGenes[0][j], weight, 1337);
+			}
+		}
+	}
+
+	for (int i = 0; i < hiddenGenes[0].size(); i++) {
+		for (int j = 0; j < hiddenGenes[0].size(); j++) {
+
+			auto temp = hiddenGenes[0][i]->getOutputGenes();
+
+			//chech if hiddenGene[j] is connected to inputgene[i]
+			if (temp.find(hiddenGenes[0][j]) != temp.end()) {
+				double weight = 0;
+				for (auto connection : hiddenGenes[0][i]->getOutConnections()) {
+					if (connection->getOutGene() == hiddenGenes[0][j]) {
+						weight = connection->getWeight();
+					}
+				}
+				newHiddenGenes[0][i]->setOutput(newHiddenGenes[0][j], weight, 1337);
+			}
+		}
+	}
+
+	for (int i = 0; i < hiddenGenes[0].size(); i++) {
+		for (int j = 0; j < outputGenes[0].size(); j++) {
+			auto temp = hiddenGenes[0][i]->getOutputGenes();
+			//chech if hiddenGene[j] is connected to inputgene[i]
+			if (temp.find(outputGenes[0][j]) != temp.end()) {
+				double weight = 0;
+				for (auto connection : hiddenGenes[0][i]->getOutConnections()) {
+					if (connection->getOutGene() == outputGenes[0][j]) {
+						weight = connection->getWeight();
+					}
+				}
+				newHiddenGenes[0][i]->setOutput(newOutputGenes[0][j], weight, 1337);
+			}
+		}
+	}
+
+
+	
+	return copy;
+
+	
 }
 
 

@@ -17,15 +17,15 @@ public:
 	Node_gene(double value);
 	Node_gene(double value, std::set<Connection_gene*>& inputs, std::set<Connection_gene*>& outputs);
 
-	Node_gene(const Node_gene& obj) {	//TODO get this into cpp
-		this->value = obj.value;
-		for (auto it : obj.inputs) {
-			this->inputs.insert(it);
-		}
-		for (auto it : obj.outputs) {
-			this->outputs.insert(it);
-		}
-	}
+	//Node_gene(const Node_gene& obj) {	//TODO get this into cpp
+	//	this->value = obj.value;
+	//	for (auto it : obj.inputs) {
+	//		this->inputs.insert(it);
+	//	}
+	//	for (auto it : obj.outputs) {
+	//		this->outputs.insert(it);
+	//	}
+	//}
 
 
 	void setValue(double value);
