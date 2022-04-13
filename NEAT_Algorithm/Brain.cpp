@@ -12,8 +12,8 @@ void Brain::addHiddenGene() {
 	allGenes.insert(allGenes.end(), hiddenGenes->begin(), hiddenGenes->end());
 
 	
-	int chosenGene = rand() % allGenes.size();		//choose random gene
-	Node_gene* inGene = allGenes[chosenGene];
+	int chosenGeneNumber = rand() % allGenes.size();		//choose random gene
+	Node_gene* inGene = allGenes[chosenGeneNumber];
 
 
 	std::set<Connection_gene*> set = inGene->getOutConnections();
@@ -21,10 +21,10 @@ void Brain::addHiddenGene() {
 	std::copy(set.begin(), set.end(), connections.begin());		//creating a vector of gene's connections
 
 	
-	int choosenConnection = rand() % connections.size();		//choose random outConnection of chosen gene		
+	int choosenConnectionNumber = rand() % connections.size();		//choose random outConnection of chosen gene		
 	
 
-	Connection_gene* connection = connections[choosenConnection];
+	Connection_gene* connection = connections[choosenConnectionNumber];
 	Node_gene* outGene = connection->getOutGene();
 	double weight = connection->getWeight();
 
@@ -45,25 +45,22 @@ void Brain::addConnection() {
 	allGenes.insert(allGenes.end(), hiddenGenes->begin(), hiddenGenes->end());
 
 
-	int firstChosenGene = rand() % allGenes.size();		//choose first random gene
-	Node_gene* firstGene = allGenes[firstChosenGene];
+	int firstChosenNumber = rand() % allGenes.size();		//choose first random gene
+	Node_gene* firstGene = allGenes[firstChosenNumber];
 
-	int secondChosenGene = rand() % allGenes.size();	//choose second random gene
-	Node_gene* secondGene = allGenes[secondChosenGene];
+	int secondChosenNumber = rand() % allGenes.size();	//choose second random gene
+	Node_gene* secondGene = allGenes[secondChosenNumber];
 	
 	std::set<Node_gene*> outputs = firstGene->getOutputGenes();
 
 	
 	if (outputs.find(secondGene) != outputs.end()) {
-
-		double weight = rand() / (RAND_MAX + 1.);
+		double weight = rand() / (RAND_MAX + 1.);	//choose random number close to 1(actually it would be better to be close to 0
 		firstGene->setOutput(secondGene, weight, 50);
 
-		weight = rand() / (RAND_MAX + 1.);
+		weight = rand() / (RAND_MAX + 1.);		//same
 		secondGene->setInput(firstGene, weight, 50);
 	}
-
-
 
 }
 void Brain::changeWeightsRandomly() {
@@ -71,7 +68,7 @@ void Brain::changeWeightsRandomly() {
 		for (auto connection : input->getOutConnections()) {
 			if (rand() % 100 < 40) {
 				double value = connection->getWeight();
-				value = value + rand() / (RAND_MAX + 1.);
+				value = value + rand() / (RAND_MAX + 1.);		//choose random number close to 1
 				connection->setWeight(value);
 			}
 		}
@@ -80,7 +77,7 @@ void Brain::changeWeightsRandomly() {
 		for (auto connection : gene->getOutConnections()) {
 			if (rand() % 100 < 40) {
 				double value = connection->getWeight();
-				value = value + rand() / (RAND_MAX + 1.);
+				value = value + rand() / (RAND_MAX + 1.);		//choose random number close to 1
 				connection->setWeight(value);
 			}
 		}
